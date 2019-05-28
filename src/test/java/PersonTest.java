@@ -1,6 +1,8 @@
-import org.junit.*;
-import static org.junit.Assert.*;
-import org.sql2o.*;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class PersonTest {
@@ -35,6 +37,27 @@ public class PersonTest {
         Person testPerson = new Person("Henry", "[email protected]");
         testPerson.save();
         assertTrue(Person.all().get(0).equals(testPerson));
+    }
+
+    @Rule
+    public DatabaseRule database = new DatabaseRule();
+
+    @Test
+    public void all_returnsAllInstancesOfPerson_true() {
+        Person firstPerson = new Person("Henry", "henry@henry.com");
+        firstPerson.save();
+        Person secondPerson = new Person("Harriet", "harriet@harriet.com");
+        secondPerson.save();
+        assertEquals(true, Person.all().get(0).equals(firstPerson));
+        assertEquals(true, Person.all().get(1).equals(secondPerson));
+    }
+
+    @Test
+    public void save_assignsIdToObject() {
+        Person testPerson = new Person("Henry", "henry@henry.com");
+        testPerson.save();
+        Person savedPerson = Person.all().get(0);
+        assertEquals(testPerson.getId(), savedPerson.getId());
     }
 
 }
