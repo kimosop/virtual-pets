@@ -1,7 +1,8 @@
-
 import org.sql2o.Connection;
 
 import java.util.List;
+
+
 
 public class Person {
     private String name;
@@ -33,12 +34,13 @@ public class Person {
     }
 
     public void save() {
-        try (Connection con = DB.sql2o.open()) {
+        try(Connection con = DB.sql2o.open()) {
             String sql = "INSERT INTO persons (name, email) VALUES (:name, :email)";
-            con.createQuery(sql)
+            this.id = (int) con.createQuery(sql, true)
                     .addParameter("name", this.name)
                     .addParameter("email", this.email)
-                    .executeUpdate();
+                    .executeUpdate()
+                    .getKey();
         }
     }
 
@@ -49,16 +51,21 @@ public class Person {
         }
     }
 
-    public void save() {
+    public int getId() {
+        return id;
+    }
+
+    public static Person find(int id) {
         try(Connection con = DB.sql2o.open()) {
-            String sql = "INSERT INTO persons (name, email) VALUES (:name, :email)";
-            this.id = (int) con.createQuery(sql, true)
-                    .addParameter("name", this.name)
-                    .addParameter("email", this.email)
-                    .executeUpdate()
-                    .getKey();
+            String sql = "SELECT * FROM persons where id=:id";
+            Person person = con.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Person.class);
+            return person;
         }
     }
+
+
 }
 
 
