@@ -16,12 +16,14 @@ public class Monster {
     public static final int MIN_ALL_LEVELS = 0;
 
 
-    // Contructoe
+
+    // Constructors
     public Monster (String name, int personId){
         this.name = name;
         this.personId = personId;
         this.playLevel = MAX_PLAY_LEVEL / 2;
         this.sleepLevel = MAX_SLEEP_LEVEL / 2;
+        this.foodLevel = MAX_FOOD_LEVEL / 2;
         }
 
 
@@ -82,6 +84,20 @@ public class Monster {
 
     public int getSleepLevel(){
         return sleepLevel;
+    }
+
+    public int getFoodLevel(){
+        return foodLevel;
+    }
+
+    //Constructor for testing if alive
+    public boolean isAlive() {
+        if (foodLevel <= MIN_ALL_LEVELS ||
+                playLevel <= MIN_ALL_LEVELS ||
+                sleepLevel <= MIN_ALL_LEVELS) {
+            return false;
+        }
+        return true;
     }
 
 
