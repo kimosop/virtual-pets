@@ -1,6 +1,10 @@
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -62,6 +66,8 @@ public class MonsterTest {
         Monster savedMonster = Monster.all().get(0);
         assertEquals(savedMonster.getId(), testMonster.getId());
     }
+
+
 
     @Test
     public void all_returnsAllInstancesOfMonster_true() {
@@ -212,6 +218,17 @@ public class MonsterTest {
         }
         assertTrue(testMonster.getSleepLevel() <= Monster.MAX_SLEEP_LEVEL);
     }
+
+    @Test
+    public void save_recordsTimeOfCreationInDatabase() {
+        Monster testMonster = new Monster("Bubbles", 1);
+        testMonster.save();
+        Timestamp savedMonsterBirthday = Monster.find(testMonster.getId()).getBirthday();
+        Timestamp rightNow = new Timestamp(new Date().getTime());
+        assertEquals(rightNow, savedMonsterBirthday);
+    }
+
+
 
 
 }
